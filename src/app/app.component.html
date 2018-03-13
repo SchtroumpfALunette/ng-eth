@@ -1,0 +1,9 @@
+<h1>Welcome</h1>
+
+<div>
+    <eth-identicon [address]="address$ | async"></eth-identicon>
+</div>
+
+<ul>
+    <li *ngFor="let address of addresses$ | async">{{address}}</li>
+</ul>
