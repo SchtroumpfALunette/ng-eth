@@ -1,4 +1,4 @@
-import { EntityState, createEntityAdapter } from '@ngrx/entity';
+import { EntityAdapter, EntityState, createEntityAdapter } from '@ngrx/entity';
 import { TransactionReceipt } from 'web3/types';
 import * as actions from './actions';
 
@@ -6,7 +6,7 @@ export interface State extends EntityState<TransactionReceipt>{
     pending: string[];
 }
 
-export const adapter = createEntityAdapter<TransactionReceipt> ({
+export const adapter: EntityAdapter<TransactionReceipt> = createEntityAdapter<TransactionReceipt> ({
     selectId: (tx: TransactionReceipt) => tx.transactionHash,
     sortComparer: false
 });

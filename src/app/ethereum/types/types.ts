@@ -16,9 +16,9 @@ export declare interface JsonRPCResponse {
   error?: string
 }
 
-type Callback<T> = (error: Error, result: T) => void
-type ABIDataTypes = "uint256" | "boolean" | "string" | "bytes" | string // TODO complete list
-type PromiEventType = "transactionHash" | "receipt" | "confirmation" | "error"
+export type Callback<T> = (error: Error, result: T) => void
+export type ABIDataTypes = "uint256" | "boolean" | "string" | "bytes" | string // TODO complete list
+export type PromiEventType = "transactionHash" | "receipt" | "confirmation" | "error"
 export declare interface PromiEvent<T> extends Promise<T> {
   once(type: "transactionHash", handler: (receipt: string) => void): PromiEvent<T>
   once(type: "receipt", handler: (receipt: TransactionReceipt) => void): PromiEvent<T>
@@ -277,7 +277,7 @@ export declare interface IpcProvider extends IProvider {
   reset(): undefined
 }
 export type Provider = WebsocketProvider | IpcProvider | HttpProvider;
-type Unit = "kwei" | "femtoether" | "babbage" | "mwei" | "picoether" | "lovelace" | "qwei" | "nanoether" | "shannon" | "microether" | "szabo" | "nano" | "micro" | "milliether" | "finney" | "milli" | "ether" | "kether" | "grand" | "mether" | "gether" | "tether"
+export type Unit = "kwei" | "femtoether" | "babbage" | "mwei" | "picoether" | "lovelace" | "qwei" | "nanoether" | "shannon" | "microether" | "szabo" | "nano" | "micro" | "milliether" | "finney" | "milli" | "ether" | "kether" | "grand" | "mether" | "gether" | "tether"
 export type BlockType = "latest" | "pending" | "genesis" | number
 export declare interface Iban { }
 export declare interface Utils {

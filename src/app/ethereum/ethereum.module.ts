@@ -44,7 +44,7 @@ export class EthereumModule {
         web3Provider,
         {
           provide: WEB3,
-          useFactory: (provider) => new Web3(Web3.givenProvider || provider.provider),
+          useFactory: (provider: any) => new Web3(Web3.givenProvider || provider.provider),
           deps: [web3Provider]
         }
       ]
