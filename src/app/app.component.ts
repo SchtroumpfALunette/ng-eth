@@ -3,7 +3,8 @@ import { Component, Inject, OnInit } from '@angular/core';
 import Web3 from 'web3';
 import { ContractService, WalletService, EthService, Wallet } from './ethereum';
 import { WEB3 } from './ethereum/tokens';
-import { abi } from './abi/nexium';
+import { abi as nxcAbi } from './abi/nexium';
+import { abi as libraryAbi } from './abi/library';
 // NGRX
 import { Store, select } from '@ngrx/store';
 import { EthState } from './ethereum/reducers';
@@ -13,6 +14,7 @@ import { GetAccounts } from './ethereum/accounts';
 import { Observable } from 'rxjs/Observable';
 import { combineLatest } from 'rxjs/observable/combineLatest';
 import { map, filter, switchMap } from 'rxjs/operators';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -24,11 +26,14 @@ export class AppComponent implements OnInit {
   public address$: Observable<string>;
   public addresses$: Observable<string[]>;
 
-  constructor(private store: Store<EthState>) {}
+  constructor(private store: Store<EthState>, private contract: ContractService) {}
 
   ngOnInit() {
     this.store.dispatch( new GetAccounts() );
     this.addresses$ = this.store.pipe(select((state: EthState) => state.accounts));
+
+    const library = this.contract.createContract(libraryAbi, environment.addresses.library);
+    library.methods['getAsset'](2).subscribe(console.log);
   }
 
 }

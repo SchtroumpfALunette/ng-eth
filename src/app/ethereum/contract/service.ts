@@ -1,3 +1,5 @@
+import { environment } from './../../../environments/environment';
+import { decodeOutPutStruct } from './utils/struct';
 import { Injectable, Inject } from '@angular/core';
 import { WEB3 } from './../tokens';
 import Web3 from 'web3';
@@ -8,7 +10,10 @@ import { ContractOptions } from './types';
 
 // RXJS
 import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
 import { bindNodeCallback } from 'rxjs/observable/bindNodeCallback';
+import { map, tap } from 'rxjs/operators';
+import { fromPromise } from 'rxjs/observable/fromPromise';
 
 @Injectable()
 export class ContractService {
@@ -27,21 +32,45 @@ export class ContractService {
      */
     public createContract(abi: ABIDefinition[], address: string, options?: ContractOptions): NgContract {
         const contract = new this.web3.eth.Contract(abi, address, options);
-        const ngContract: NgContract = { ...contract } as any;
+        const ngContract: NgContract = { ...contract, methods: {} } as any;
+        
+        /** Check if function returns a Struct */
+        const hasTuple = (def: ABIDefinition): boolean => {
+            const outputTypes = def.outputs.map((output) => output.type);
+            return outputTypes.indexOf('tuple') !== -1 || outputTypes.indexOf('tuple[]') !== -1;
+        }
+        
         abi.forEach((def: ABIDefinition) => {
             if (def.type === 'function' && def.constant === true) {
                 // Call function
-                const method = contract.methods[def.name];
-                const ngMethod = (...args: any[]) => {
-                    return bindNodeCallback<any>(method(...args)['call'])();
+                if (hasTuple(def)) {
+                    // Call Function returns a Struct or Array of Struct
+                    const ngMethod = (...args: any[]) => {
+                        const method = this.web3.eth.call({
+                            to: address,
+                            data: contract.methods[def.name](...args).encodeABI()
+                        }).then((hex: string) => decodeOutPutStruct(hex, abi, def.name));
+                        return fromPromise<any>(method);
+                    }
+                    ngContract.methods[def.name] = ngMethod;
+                } else {
+                    // Call Function without Structs
+                    const ngMethod = (...args: any[]) => {
+                        const method = contract.methods[def.name];
+                        const call = method(...args)['call'];
+                        return bindNodeCallback<any>(call)();
+                    }
+                    ngContract.methods[def.name] = ngMethod;
                 }
-                ngContract.methods[def.name] = ngMethod;
+
             } else if (def.type === 'function' && def.constant === false) {
                 // Send function
-            } else if (def.type === 'tuple') {
-                // Decode hex of struct
-            } else if (def.type === 'tuple[]') {
-                // Decode hex of array of struct
+                const ngMethod = (...args: any[]) => {
+                    const method = contract.methods[def.name];
+                    const send = method(...args)['send']          
+                    return bindNodeCallback<any>(send)();
+                }
+                ngContract.methods[def.name] = ngMethod;
             }
         });
         this.contracts[address] = ngContract;

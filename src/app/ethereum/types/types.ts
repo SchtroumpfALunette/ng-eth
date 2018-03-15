@@ -17,7 +17,10 @@ export declare interface JsonRPCResponse {
 }
 
 export type Callback<T> = (error: Error, result: T) => void
-export type ABIDataTypes = "uint256" | "boolean" | "string" | "bytes" | string // TODO complete list
+export type ABIDataTypes = "uint256" | "boolean" | "string" | "bytes" | "tuple" | "tuple[]" | string // TODO complete list
+export type ABIOutput = { name: string, type: ABIDataTypes, components?: ABIOutput[] }
+export type ABIInput = { name: string, type: ABIDataTypes, indexed?: boolean, components?: ABIInput[] }
+
 export type PromiEventType = "transactionHash" | "receipt" | "confirmation" | "error"
 export declare interface PromiEvent<T> extends Promise<T> {
   once(type: "transactionHash", handler: (receipt: string) => void): PromiEvent<T>
@@ -50,10 +53,11 @@ export declare interface ABIDefinition {
   constant?: boolean
   payable?: boolean
   anonymous?: boolean
-  inputs?: Array<{ name: string, type: ABIDataTypes, indexed?: boolean }>
+  inputs?: Array<ABIInput>
   name?: string
-  outputs?: Array<{ name: string, type: ABIDataTypes }>
-  type: "function" | "constructor" | "event" | "fallback" | "tuple" | "tuple[]"
+  outputs?: Array<ABIOutput>
+  stateMutability?: "view" | "pure" | "payable" | "nonpayable"
+  type: "function" | "constructor" | "event" | "fallback"
 }
 export declare interface CompileResult {
   code: string
