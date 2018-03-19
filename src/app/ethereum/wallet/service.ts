@@ -1,10 +1,13 @@
 import { Injectable, Inject } from '@angular/core';
+
+// Etherum
 import { WEB3 } from '../tokens';
+import Web3 from 'web3';
 import { Wallet, Account } from '../types/types';
 import * as hdkey from 'ethereumjs-wallet/hdkey';
 import * as bip39 from 'bip39';
-import Web3 from 'web3';
 
+// RXJS
 import { Observable } from 'rxjs/Observable';
 import { bindNodeCallback } from 'rxjs/observable/bindNodeCallback';
 import { fromPromise } from 'rxjs/observable/fromPromise';
@@ -25,7 +28,7 @@ export class WalletService {
 
     /**
      * Create a new HDWallet
-     * @param { number } accountAmount The amount of account to create in this wallet
+     * @param accountAmount The amount of account to create in this wallet
      */
     public newHDWallet(accountAmount?: number): Wallet {
         return this.createHDWallet(null, accountAmount);
@@ -33,8 +36,8 @@ export class WalletService {
 
     /**
      * Recover an HDWallet
-     * @param { string } mnemonic The 12 mnemonics as one string
-     * @param { number } accountAmount The amount of account to create in this wallet  
+     * @param mnemonic The 12 mnemonics as one string
+     * @param accountAmount The amount of account to create in this wallet  
      */
     public recoverHDWallet(mnemonic: string, accountAmount?: number): Wallet {
         return this.createHDWallet(mnemonic, accountAmount);
@@ -42,8 +45,8 @@ export class WalletService {
 
     /**
      * Create an HD Wallet based on 12 mnemonics
-     * @param { string } words The 12 mnemonics as one string
-     * @param { number } accountAmount The amount of account to create in this wallet
+     * @param words The 12 mnemonics as one string
+     * @param accountAmount The amount of account to create in this wallet
      */
     private createHDWallet(words?: string, accountAmount?: number): Wallet {
         /** Normalise the amount of accounts */
@@ -71,18 +74,6 @@ export class WalletService {
         }
         return web3Wallet;
     }
-
-    /*******************
-     * ACCOUNT
-     */
-     /** Return the list of accounts available */
-     public getAccount(): Observable<string[]> {
-         return fromPromise(this.web3.eth.getAccounts());
-        // return bindNodeCallback(this.web3.eth.getAccounts)();
-    }
-
-    public get defaultAccount(): string { return this.web3.eth.defaultAccount; }
-    public set defaultAccount(account: string) { this.web3.eth.defaultAccount = account; }
 
     /********************
      * KEYSTORE

@@ -1,12 +1,23 @@
-import {  GET_ACCOUNTS_SUCCESS, AccountsActions } from './actions';
+import { GET_ACCOUNTS_SUCCESS, SELECT_ACCOUNT, AccountsActions } from './actions';
 
-export const reducers = (state = [], action: AccountsActions): string[] => {
+export interface State {
+    selected: string,
+    accounts: string[]
+}
+
+const initialState: State = {
+    selected: null,
+    accounts: []
+}
+
+export const reducers = (state = initialState, action: AccountsActions): State => {
     switch (action.type) {
-        /** ACCOUNTS */
         case (GET_ACCOUNTS_SUCCESS): {
-            return action.payload;
+            return {...state, accounts: action.payload };
         };
-        /** WALLET */
+        case (SELECT_ACCOUNT): {
+            return {...state, selected: action.payload };
+        };
         default: {
             return state;
         }

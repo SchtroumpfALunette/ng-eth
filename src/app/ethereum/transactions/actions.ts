@@ -1,4 +1,4 @@
-import { TransactionReceipt } from 'web3/types';
+import { TransactionReceipt } from '../types';
 import { Action } from '@ngrx/store';
 
 export const TX_BROADCASTED =  '[Eth] Transaction Broadcasted';

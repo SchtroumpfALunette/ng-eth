@@ -1,2 +1,9 @@
 # ng-eth
-Angular / NGRX module for Ethereum
+Angular module for Ethereum based on web3.js
+
+## Install
+```
+npm install ng-eth --save
+```
+
+## Example

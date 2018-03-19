@@ -1,5 +1,5 @@
 import { EntityAdapter, EntityState, createEntityAdapter } from '@ngrx/entity';
-import { TransactionReceipt } from 'web3/types';
+import { TransactionReceipt } from '../types';
 import * as actions from './actions';
 
 export interface State extends EntityState<TransactionReceipt>{

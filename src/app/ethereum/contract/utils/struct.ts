@@ -89,7 +89,7 @@ export const decodeStruct = (result: string, outputs: ABIOutput[]): {struct: Str
                     // Go to next line : the string in an hex format
                     oneLine = str.substr(valueString + tempStringValue, 64);
                     tempStringValue += 64;
-                    tab[name] += hexToString(oneLine, charAmount > 64 ? 64 : charAmount);
+                    struct[name] += hexToString(oneLine, charAmount > 64 ? 64 : charAmount);
                     charAmount -= 64;
                 }
                 break;

@@ -1,0 +1,12 @@
+<h1>Addresses</h1>
+<ul>
+  <li *ngFor="let address of addresses$ | async">
+    {{ address }}
+  </li>
+</ul>
+<h1>Assets</h1>
+<ul>
+  <li *ngFor="let asset of assets$|async">
+    {{ asset | json }}
+  </li>
+</ul>

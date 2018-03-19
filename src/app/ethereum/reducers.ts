@@ -1,16 +1,19 @@
 import { ActionReducerMap, createFeatureSelector } from '@ngrx/store';
-import * as fromAccounts from './accounts';
-import * as fromWallet from './wallet';
-import * as fromTransaction from './transactions';
+import * as fromAccounts from './accounts/reducers';
+import * as fromWallet from './wallet/reducers';
+import * as fromTransaction from './transactions/reducers';
+import * as fromContract from './contract/reducers';
 
 export interface EthState {
     wallet: fromWallet.State,
-    accounts: string[],
-    transactions: fromTransaction.State
+    accounts: fromAccounts.State,
+    transactions: fromTransaction.State,
+    contracts: fromContract.State
 }
 
-export const reducers: ActionReducerMap<EthState> = {
+export const ethReducers: ActionReducerMap<EthState> = {
     wallet: fromWallet.reducers,
     accounts: fromAccounts.reducers,
-    transactions: fromTransaction.reducers
+    transactions: fromTransaction.reducers,
+    contracts: fromContract.reducers
 };

@@ -6,6 +6,6 @@
 export const environment = {
   production: false,
   addresses: {
-    library: '0x9E87e6e51BA948A9b9B97aa6349A2b4771026feD'
+    library: '0x285419c0972dfaf787ddd73e81cdf95ebb11964c'
   }
 };
